@@ -13,7 +13,7 @@ from ml_pipeline.load_models import (
 
 # Radiomics extractor
 extractor = featureextractor.RadiomicsFeatureExtractor(
-    "/Users/srikanthminisetti/Documents/Thesis_Final_work/notebook/global_strong_params.yaml"
+    "mode_pkl/global_strong_params.yaml"
 )
 
 # Feature order used during training (58 features)
