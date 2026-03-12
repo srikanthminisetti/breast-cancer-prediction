@@ -1,0 +1,16 @@
+imageType:
+  Original: {}
+
+featureClass:
+  firstorder: []
+  glcm: []
+  glrlm: []
+
+setting:
+  binWidth: 25
+  normalize: true
+  normalizeScale: 100
+  removeOutliers: 3
+  force2D: true
+  force2Ddimension: 0
+  correctMask: true
