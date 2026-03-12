@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result | Breast Cancer Detection</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Courgette&display=swap" rel="stylesheet">
+    <link rel="icon" href="/static/media/pink-ribbon-logo-png-transparent-719x899.ico">
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffc0cb, #ffe6f0);
+            font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+        }
+        .navbar {
+            background: #F7567C !important;
+            padding: 15px 60px;
+        }
+        .navbar-brand {
+            color: white !important;
+            font-family: 'Courgette', cursive;
+            font-size: 1.7rem;
+        }
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 600;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #c2185b !important;
+        }
+
+        /* Layout Sections */
+        .result-section {
+            padding: 140px 0 80px 0;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .result-title {
+            text-align: center;
+            color: #c2185b;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        /* Image Display */
+        .result-img-container {
+            border: 3px solid #f06292;
+            padding: 10px;
+            border-radius: 15px;
+            display: inline-block;
+            background: #fff5f8;
+        }
+
+        .result-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        /* Analysis Details */
+        .analysis-details {
+            padding: 20px;
+            background: #fdfdfd;
+            border-radius: 15px;
+        }
+
+        .result-label {
+            font-size: 14px;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .result-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* UI Elements */
+        .progress {
+            height: 12px;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            background-color: #F7567C;
+        }
+
+        .back-btn {
+            background: #F7567C;
+            border: none;
+            border-radius: 30px;
+            padding: 12px 40px;
+            color: white;
+            font-weight: 600;
+            transition: 0.3s ease-in-out;
+        }
+
+        .back-btn:hover {
+            background: #d63d66;
+            color: white;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        .disclaimer-box {
+            background: #fff5f7;
+            border-left: 5px solid #F7567C;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #555;
+            margin-top: 25px;
+        }
+
+        .site-footer {
+            background: #F7567C;
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include "components/navbar.html" %}
+
+    <main class="result-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="result-card">
+                        
+                        <h2 class="result-title">AI Analysis Results</h2>
+
+                        <div class="row align-items-center">
+                            <div class="col-md-5 text-center mb-4 mb-md-0">
+                                <div class="result-img-container">
+                                    <img src="/uploads/{{ filename }}" class="result-img" alt="Uploaded Mammogram for Analysis">
+                                </div>
+                                <p class="text-muted mt-2 small">Analyzed Mammogram Image</p>
+                            </div>
+
+                            <div class="col-md-7">
+                                <div class="analysis-details">
+                                    
+                                    <p class="result-label">Patient Name</p>
+                                    <p class="result-value">{{ fn }}</p>
+
+                                    <p class="result-label">AI Diagnostic Result</p>
+                                    <div class="mb-4">
+
+                                        {% if "Normal" in r or "Benign" in r %}
+                                            <span class="badge badge-success px-3 py-2">{{ r }}</span>
+
+                                        {% elif "Suspicious" in r %}
+                                            <span class="badge badge-warning px-3 py-2">{{ r }}</span>
+
+                                        {% else %}
+                                            <span class="badge badge-danger px-3 py-2">{{ r }}</span>
+
+                                        {% endif %}
+
+                                    </div>
+
+                                    {% if r != "normal" %}
+                                        <p class="result-label">AI Confidence Level</p>
+                                        <div class="d-flex align-items-center mb-3">
+                                            <div class="progress flex-grow-1 mr-3">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                                     role="progressbar" 
+                                                     style="width: {{ probab }}%;" 
+                                                     aria-valuenow="{{ probab }}" 
+                                                     aria-valuemin="0" 
+                                                     aria-valuemax="100">
+                                                </div>
+                                            </div>
+                                            <span class="font-weight-bold text-dark">{{ probab }}%</span>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <p class="result-label">Severity</p>
+                                                <p class="font-weight-bold text-uppercase">{{ c }}</p>
+                                            </div>
+                                            <div class="col-6">
+                                                <p class="result-label">Severity Score</p>
+                                                <p class="font-weight-bold">{{ s }}</p>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+
+                                    <hr>
+
+                                    <div class="disclaimer-box">
+                                        <h6 class="text-danger font-weight-bold">
+                                            <i class="fas fa-exclamation-circle"></i> Medical Disclaimer
+                                        </h6>
+                                        <p class="mb-0">
+                                            This prediction is generated by an AI model for <strong>educational and research purposes only</strong>. 
+                                            The results may contain errors. Please consult a qualified radiologist for a formal diagnosis.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-5">
+                            <a href="/treatment" class="btn back-btn">
+                                <i class="fas fa-redo mr-2"></i> Analyze Another Image
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% include "components/footer.html" %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

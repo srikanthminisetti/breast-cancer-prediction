@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction | Breast Cancer Detection</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&family=Courgette&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    
+    <style>
+        /* Global Styles */
+        body {
+            background: linear-gradient(135deg, #ffc0cb, #ffe6f0);
+            font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: #F7567C !important;
+            padding: 15px 60px;
+        }
+        .navbar-brand {
+            color: white !important;
+            font-family: 'Courgette', cursive;
+            font-size: 1.7rem;
+        }
+        .navbar-nav .nav-link {
+            color: white !important;
+            font-weight: 600;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #ffe6f0 !important;
+        }
+
+        /* Main Section */
+        .prediction-section {
+            padding-top: 140px;
+            padding-bottom: 80px;
+        }
+
+        .prediction-card {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .prediction-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #c2185b;
+            font-weight: 700;
+        }
+
+        /* Form Controls */
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        /* Dynamic Upload Box */
+        .upload-box {
+            border: 2px dashed #f06292;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            background: #fff5f8;
+            transition: 0.3s;
+        }
+        .upload-icon {
+            font-size: 35px;
+            color: #F7567C;
+            margin-bottom: 10px;
+        }
+        .upload-text {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        .upload-btn {
+            background: #F7567C;
+            color: white !important;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-block;
+            transition: 0.3s;
+        }
+        .upload-btn:hover {
+            background: #d63d66;
+            transform: translateY(-2px);
+        }
+        .file-name {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #777;
+            font-style: italic;
+        }
+
+        /* Action Buttons */
+        .submit-btn {
+            background: #F7567C;
+            border: none;
+            padding: 12px;
+            font-weight: 600;
+            border-radius: 30px;
+            color: white;
+            transition: 0.3s;
+        }
+        .submit-btn:hover {
+            background: #d63d66;
+            box-shadow: 0 4px 15px rgba(247, 86, 124, 0.4);
+        }
+
+        /* Disclaimer */
+        .disclaimer-box {
+            background: #fff5f7;
+            border-left: 5px solid #F7567C;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+        .disclaimer-box h6 {
+            color: #c2185b;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: #F7567C;
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+        .footer-links a {
+            color: #ffe6ef;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    {% include "components/navbar.html" %}
+
+    <section class="prediction-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-7">
+                    
+                    <div class="prediction-card">
+                        <h2 class="prediction-title">Breast Cancer Prediction</h2>
+
+                        <form action="/predict" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label><strong>Patient Name</strong></label>
+                                <input type="text" name="firstname" class="form-control" placeholder="Enter full name" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Patient Age</strong></label>
+                                <input type="number" name="age" class="form-control" placeholder="Enter patient age" min="1" max="100" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Mammogram Scan</strong></label>
+                                <div class="upload-box">
+                                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                    <p class="upload-text">Drag & Drop or Select Scan</p>
+                                    
+                                    <input type="file" id="fileUpload" name="file" hidden required>
+                                    
+                                    <label for="fileUpload" class="upload-btn">
+                                        Choose File
+                                    </label>
+                                    <p id="file-name" class="file-name">No file selected</p>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn submit-btn btn-block mt-4">
+                                Run AI Analysis
+                            </button>
+                        </form>
+
+                        <div class="disclaimer-box mt-4">
+                            <h6><i class="fas fa-user-md"></i> Medical Disclaimer</h6>
+                            <p class="mb-0">
+                                This system is for <strong>educational and research purposes only</strong>. 
+                                AI predictions are not a substitute for professional medical diagnosis. 
+                                Always consult a 1qualified doctor for proper evaluation.
+                            </p>
+                        </div>
+                    </div> </div>
+            </div>
+        </div>
+    </section>
+
+    {% include "components/footer.html" %}
+
+    <script>
+        document.getElementById("fileUpload").addEventListener("change", function(){
+            const fileName = this.files[0]?.name || "No file selected";
+            document.getElementById("file-name").textContent = fileName;
+            
+            // Optional: Change color of text when file is selected
+            if(this.files[0]) {
+                document.getElementById("file-name").style.color = "#c2185b";
+                document.getElementById("file-name").style.fontWeight = "600";
+            }
+        });
+    </script>
+
+</body>
+</html>

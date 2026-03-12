@@ -1,0 +1,9 @@
+venv/
+uploads/
+__pycache__/
+*.pyc
+.DS_Store
+csv/
+data/
+notebook/
+NoteBooks/

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs | Breast Cancer Prediction</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&family=Courgette&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    
+    <style>
+        /* Global Styles */
+        body {
+            background: #fff7fa;
+            font-family: 'Raleway', sans-serif;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: #F7567C !important;
+            padding: 15px 60px;
+        }
+        .navbar-brand {
+            color: white !important;
+            font-family: 'Courgette', cursive;
+            font-size: 1.7rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding-top: 140px;
+            padding-bottom: 80px;
+        }
+
+        .faq-header-text {
+            color: #c2185b;
+            font-weight: 700;
+        }
+
+        /* Accordion Styling */
+        .accordion .card {
+            border: none;
+            border-radius: 12px !important;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .card-header {
+            background: #ffe6ef;
+            border-bottom: none;
+            padding: 0;
+        }
+
+        .btn-link {
+            color: #c2185b;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 20px;
+            width: 100%;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-link:hover, .btn-link:focus {
+            text-decoration: none;
+            color: #d63d66;
+        }
+
+        .btn-link.collapsed::after {
+            content: '\f0fe'; /* FontAwesome Plus */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+
+        .btn-link::after {
+            content: '\f146'; /* FontAwesome Minus */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+        }
+
+        .card-body {
+            line-height: 1.6;
+            color: #555;
+            background: #fff;
+        }
+
+        /* Ask Question Box */
+        .ask-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-top: 60px;
+        }
+
+        .ask-title {
+            color: #c2185b;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #ffd1df;
+        }
+
+        .submit-btn {
+            background: #F7567C;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #d63d66;
+            transform: translateY(-2px);
+        }
+
+        /* Footer */
+        .site-footer {
+            background: #F7567C;
+            color: white;
+            padding: 40px 0;
+            margin-top: 80px;
+        }
+
+        /* Loading Screen */
+        #loading {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            background: #fff url('https://cdnjs.cloudflare.com/ajax/libs/galleriffic/2.0.1/css/loader.gif') no-repeat center center;
+            z-index: 99999;
+        }
+    </style>
+</head>
+
+<body onload="loader()">
+
+    <div id="loading"></div>
+
+    {% include "components/navbar.html" %}
+
+    <section class="faq-section">
+        <div class="container">
+            <h1 class="text-center faq-header-text mb-3">Frequently Asked Questions</h1>
+            <p class="text-center text-muted mb-5">
+                Learn more about breast cancer and how early detection saves lives.
+            </p>
+
+            
+
+[Image of breast anatomy showing lobules and ducts]
+
+
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#faq1">
+                                What is breast cancer?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="faq1" class="collapse show" data-parent="#accordionExample">
+                        <div class="card-body">
+                            Breast cancer is a disease in which abnormal cells in the breast grow uncontrollably and form tumors. If untreated, these tumors can spread to other parts of the body.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faq2">
+                                What causes breast cancer?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="faq2" class="collapse" data-parent="#accordionExample">
+                        <div class="card-body">
+                            Breast cancer can be caused by a combination of genetic, hormonal, environmental, and lifestyle factors. Family history and age may increase risk.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faq3">
+                                What doctor should I consult?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="faq3" class="collapse" data-parent="#accordionExample">
+                        <div class="card-body">
+                            You should consult a primary care physician, gynecologist, or oncologist for professional medical advice.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faq4">
+                                Can exercise reduce breast cancer risk?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="faq4" class="collapse" data-parent="#accordionExample">
+                        <div class="card-body">
+                            Regular physical activity can help maintain a healthy weight and reduce the risk of breast cancer by balancing hormone levels.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faq5">
+                                Does alcohol increase breast cancer risk?
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="faq5" class="collapse" data-parent="#accordionExample">
+                        <div class="card-body">
+                            Yes, studies show that alcohol consumption may slightly increase breast cancer risk. Moderation or avoidance is highly recommended.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="ask-box">
+                        <h4 class="ask-title"><i class="fas fa-question-circle mr-2"></i>Still have questions?</h4>
+                        <p class="text-muted small">Submit your query below and our team will get back to you.</p>
+                        <textarea class="form-control mb-3" rows="3" placeholder="Type your question here..."></textarea>
+                        <button class="btn submit-btn">
+                            Submit Question
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include "components/footer.html" %}
+
+    <script>
+        var preloader = document.getElementById("loading");
+        function loader(){
+            preloader.style.display = "none";
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

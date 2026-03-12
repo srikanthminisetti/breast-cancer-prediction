@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Symptoms | Breast Cancer Prediction</title>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Courgette&display=swap">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@1,900&display=swap">
+
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&display=swap">
+
+    <!-- Local CSS -->
+    <link rel="stylesheet" href="/static/css/symptoms.css">
+    <link rel="stylesheet" href="/static/css/css/all.min.css">
+
+    <!-- Favicon -->
+    <link rel="icon"
+          href="/static/media/pink-ribbon-logo-png-transparent-719x899.ico"
+          type="image/ico">
+
+</head>
+
+<body onload="loader()">
+
+<div id="loading"></div>
+
+<!-- Navbar -->
+{% include "components/navbar.html" %}
+
+<br>
+
+<!-- Content Section -->
+<div class="container content">
+
+    <h1 class="text-center">Symptoms</h1>
+
+    <p class="text-center">
+        Different people have different symptoms of breast cancer.
+        Some people do not have any signs or symptoms at all.
+    </p>
+
+    <br>
+
+    <p class="text-center">
+        Here are some common symptoms that may indicate breast cancer:
+    </p>
+
+    <ul class="list-group">
+
+        <li class="list-group-item">Swelling of the breast</li>
+        <li class="list-group-item">Nipple inversion</li>
+        <li class="list-group-item">Lump in the armpit</li>
+        <li class="list-group-item">Lump in the breast</li>
+        <li class="list-group-item">Bloody discharge from the nipple</li>
+        <li class="list-group-item">Skin destruction or changes</li>
+        <li class="list-group-item">Breast pain</li>
+        <li class="list-group-item">Dimpled or puckered skin on the breast</li>
+
+    </ul>
+
+</div>
+
+<br>
+
+<!-- Footer -->
+{% include "components/footer.html" %}
+
+<!-- Loader Script -->
+<script>
+
+var preloader = document.getElementById("loading");
+
+function loader() {
+    preloader.style.display = "none";
+}
+
+</script>
+
+<!-- JS Libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
