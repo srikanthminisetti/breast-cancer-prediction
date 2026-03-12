@@ -17,7 +17,7 @@ extractor = featureextractor.RadiomicsFeatureExtractor(
 )
 
 # Feature order used during training (58 features)
-with open("/Users/srikanthminisetti/Documents/Thesis_Final_work/notebook/radiomics_featureGlobal_order.txt") as f:
+with open("mode_pkl/radiomics_featureGlobal_order.txt") as f:
     FEATURE_ORDER = [line.strip() for line in f]
 
 
