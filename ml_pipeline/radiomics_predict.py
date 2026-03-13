@@ -1,7 +1,9 @@
+import os
 import numpy as np
 import pandas as pd
 import SimpleITK as sitk
 import pydicom
+import cv2
 from radiomics import featureextractor
 
 from ml_pipeline.load_models import (
@@ -11,13 +13,22 @@ from ml_pipeline.load_models import (
     corr_features_to_drop
 )
 
-# Radiomics extractor
-extractor = featureextractor.RadiomicsFeatureExtractor(
-    "mode_pkl/global_strong_params.yaml"
-)
+# ---------------- PROJECT ROOT ----------------
 
-# Feature order used during training (58 features)
-with open("mode_pkl/radiomics_featureGlobal_order.txt") as f:
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MODEL_DIR = os.path.join(BASE_DIR, "mode_pkl")
+
+# ---------------- RADIOMICS EXTRACTOR ----------------
+
+PARAM_PATH = os.path.join(MODEL_DIR, "global_strong_params.yaml")
+
+extractor = featureextractor.RadiomicsFeatureExtractor(PARAM_PATH)
+
+# ---------------- FEATURE ORDER ----------------
+
+FEATURE_PATH = os.path.join(MODEL_DIR, "radiomics_featureGlobal_order.txt")
+
+with open(FEATURE_PATH) as f:
     FEATURE_ORDER = [line.strip() for line in f]
 
 
@@ -25,53 +36,52 @@ with open("mode_pkl/radiomics_featureGlobal_order.txt") as f:
 
 def get_radiomics_features(image_path):
 
-    # Read DICOM
-    import os
-    import cv2
-
     ext = os.path.splitext(image_path)[1].lower()
 
-    # -------- DICOM --------
+    # -------- Load Image --------
     if ext in [".dcm", ".dicom"]:
         dicom = pydicom.dcmread(image_path, force=True)
         img_array = dicom.pixel_array.astype(np.float32)
 
-    # -------- PNG / JPG --------
     elif ext in [".png", ".jpg", ".jpeg"]:
         img_array = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE).astype(np.float32)
 
     else:
         raise ValueError("Unsupported image format")
 
-    # Normalize like CNN preprocessing
+    # -------- Normalize --------
     img_array = (img_array - img_array.min()) / (img_array.max() - img_array.min() + 1e-8)
 
-    # Convert to SimpleITK image
+    # -------- Convert to SimpleITK --------
     image = sitk.GetImageFromArray(img_array)
 
-    # Create mask (remove background)
-    threshold = np.percentile(img_array, 30)
+    # -------- Create Mask --------
 
-    mask_array = (img_array > threshold).astype(np.uint8)
+    img_uint8 = (img_array * 255).astype(np.uint8)
 
-    # Safety fallback if mask becomes empty
-    if mask_array.sum() < 100:
+    _, mask_array = cv2.threshold(
+        img_uint8,
+        0,
+        1,
+        cv2.THRESH_BINARY + cv2.THRESH_OTSU
+    )
+
+    mask_array = mask_array.astype(np.uint8)
+
+    # fallback if mask fails
+    if mask_array.sum() < 50:
         mask_array = np.ones_like(img_array, dtype=np.uint8)
 
     mask = sitk.GetImageFromArray(mask_array)
     mask.CopyInformation(image)
 
-    print("Mask pixels:", mask_array.sum())
-
-    # Extract radiomics
+    # -------- Extract Radiomics --------
     result = extractor.execute(image, mask)
 
     features = []
 
-    # Maintain same feature order used during training
     for name in FEATURE_ORDER:
 
-        # remove "global_" prefix because PyRadiomics does not include it
         key = name.replace("global_", "")
 
         if key in result:
@@ -84,40 +94,29 @@ def get_radiomics_features(image_path):
     return features
 
 
-# ---------------- PREDICTION ----------------
+# ---------------- RADIOMICS PREDICTION ----------------
 
 def radiomics_predict(image_path):
 
-    # Step 1 — Extract 58 features
+    # Step 1 — Extract features
     features = get_radiomics_features(image_path)
 
-    print("Radiomics raw features sample:", features[:10])
-
-    # Step 2 — Convert to dataframe
+    # Step 2 — Convert to DataFrame
     features_df = pd.DataFrame([features], columns=FEATURE_ORDER)
 
     # Step 3 — Variance filter
     features = variance_filter.transform(features_df)
-
-    print("After variance filter:", features.shape)
-
     features_df = pd.DataFrame(features)
 
-    # Step 4 — Drop correlated features
+    # Step 4 — Remove correlated features
     features_df = features_df.drop(columns=corr_features_to_drop, errors="ignore")
-
-    print("After correlation filter:", features_df.shape)
 
     features = features_df.values
 
     # Step 5 — Scale features
     features = radiomics_scaler.transform(features)
 
-    print("Final radiomics vector:", features)
-
     # Step 6 — Predict
     probs = radiomics_model.predict_proba(features)[0]
-
-    print("Radiomics probabilities:", probs)
 
     return probs

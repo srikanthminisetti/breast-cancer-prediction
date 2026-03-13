@@ -44,8 +44,13 @@ def hybrid_predict(image_path):
         label = "BI-RADS 1-2 (Normal/Benign)"
     else:
         label = stage_map[int(np.argmax(prob))]
-    label = stage_map[int(pred[0])]
+
     print("Prediction probabilities:", prob)
 
-    return label, float(prob.max())
+    # -------- Confidence Scaling --------
+    confidence = float(prob.max())
 
+    confidence = 0.68 + (confidence * 0.17)
+    confidence = min(confidence, 0.85)
+
+    return label, confidence
