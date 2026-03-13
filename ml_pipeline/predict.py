@@ -39,18 +39,17 @@ def hybrid_predict(image_path):
     pred = xgb_model.predict(features)
     prob = xgb_model.predict_proba(features)[0]
 
-    # override rule
-    if prob[0] > 0.90:
-        label = "BI-RADS 1-2 (Normal/Benign)"
-    else:
-        label = stage_map[int(np.argmax(prob))]
+   
+
+    # -------- Confidence Scaling --------
+    pred = xgb_model.predict(features)
+    prob = xgb_model.predict_proba(features)[0]
+
+    label = stage_map[int(np.argmax(prob))]
 
     print("Prediction probabilities:", prob)
 
-    # -------- Confidence Scaling --------
-    confidence = float(prob.max())
-
-    confidence = 0.68 + (confidence * 0.17)
-    confidence = min(confidence, 0.85)
+    # confidence directly from fusion model
+    confidence = float(np.max(prob))
 
     return label, confidence

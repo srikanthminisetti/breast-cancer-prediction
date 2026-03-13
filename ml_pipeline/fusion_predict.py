@@ -15,21 +15,32 @@ stage_map = {
 
 def fusion_predict(image_path):
 
+    
+
     # -------- CNN Prediction --------
     cnn_probs = cnn_predict(image_path)
+    print("CNN probabilities:", cnn_probs)
 
     # -------- Radiomics Prediction --------
     radiomics_probs = radiomics_predict(image_path)
+    print("Radiomics probabilities:", radiomics_probs)
 
-    # -------- Combine for Fusion Model --------
+    # -------- Combine Inputs --------
     fusion_input = np.hstack([cnn_probs, radiomics_probs]).reshape(1, -1)
+    print("Fusion input vector:", fusion_input)
 
-    # -------- Final Prediction from Fusion Model --------
+    # -------- Fusion Model Prediction --------
     final_probs = fusion_model.predict_proba(fusion_input)[0]
+    print("Fusion probabilities:", final_probs)
 
     pred_class = int(np.argmax(final_probs))
     confidence = float(final_probs[pred_class])
 
     label = stage_map[pred_class]
+
+    print("Predicted class:", pred_class)
+    print("Predicted label:", label)
+    print("Confidence:", confidence)
+  
 
     return label, confidence
